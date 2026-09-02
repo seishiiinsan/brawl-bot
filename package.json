@@ -11,7 +11,8 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "deploy": "node src/deploy-commands.js",
-    "snapshot": "node src/scripts/snapshot-once.js"
+    "snapshot": "node src/scripts/snapshot-once.js",
+    "test": "node --test tests/*.test.js"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.65",

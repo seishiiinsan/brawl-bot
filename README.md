@@ -79,6 +79,20 @@ Pour déclencher un relevé depuis un cron système plutôt que depuis le bot :
 npm run snapshot
 ```
 
+## Tests
+
+```bash
+npm test
+```
+
+51 tests couvrant la normalisation des tags, le formatage français, le calcul des écarts et des
+séries, l'agrégation des combats, le rendu des graphiques (y compris les cas limites : série vide,
+plate, point unique) et l'exécution des 10 commandes contre une API simulée — avec vérification des
+limites d'embed imposées par Discord. Aucune clé ni aucun accès réseau n'est nécessaire.
+
+La CI GitHub Actions (`.github/workflows/ci.yml`) rejoue tout cela sur Node 20 et 22 à chaque
+push et chaque pull request.
+
 ## Variables d'environnement
 
 | Variable | Rôle | Défaut |
@@ -111,6 +125,7 @@ src/
   charts/
     renderer.js         rendu PNG (courbes et barres) avec @napi-rs/canvas
   commands/             une commande slash par fichier
+tests/                  tests unitaires et bout-en-bout (node:test, sans réseau)
 ```
 
 ## Notes
