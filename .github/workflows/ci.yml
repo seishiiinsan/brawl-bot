@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Tests (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Lancer les tests
+        run: npm test
+
+      - name: Vérifier que le bot démarre jusqu'à la connexion Discord
+        # Sans token valide, la connexion echoue : on verifie seulement que tous
+        # les modules se chargent et que la base s'initialise sans erreur.
+        env:
+          DISCORD_TOKEN: token-factice
+          DISCORD_CLIENT_ID: '000000000000000000'
+          BRAWL_API_KEY: cle-factice
+        run: |
+          node --input-type=module -e "
+            const { commands } = await import('./src/commands/index.js');
+            await import('./src/services/scheduler.js');
+            if (commands.size < 10) throw new Error('commandes manquantes');
+            console.log(commands.size + ' commandes chargées');
+          "
